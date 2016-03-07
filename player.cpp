@@ -11,6 +11,9 @@ Player::Player(Side side) {
     testingMinimax = false;
 
     // Hi Mara Green!
+    our_side = side;
+    other_side = (our_side == BLACK) ? WHITE : BLACK;
+    our_Board = Board();
 
     /* 
      * TODO: Do any initialization you need to do here (setting up the board,
@@ -42,5 +45,26 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's move before calculating your own move
      */ 
+
+  // check if oponent's move was not NULL. 
+  // If not, make their move on our board.
+  if (not(opponentsMove == NULL)) {
+    our_Board.doMove(opponentsMove, other_side);
+  }
+
+  // If we have no possible moves, return NULL:
+  if (not(our_Board.hasMoves(our_side))) {
     return NULL;
+  }
+
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 7; j++) {
+      Move try_move = Move(i, j);
+      if (our_Board.checkMove(&try_move, our_side)) {
+	return &try_move;
+      }
+    }
+  }
+  
+  return NULL;
 }

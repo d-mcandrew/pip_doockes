@@ -8,6 +8,11 @@ using namespace std;
 
 class Player {
 
+private:
+  Board our_Board;
+  Side our_side;
+  Side other_side;
+
 public:
     Player(Side side);
     ~Player();
