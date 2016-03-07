@@ -57,14 +57,13 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return NULL;
   }
 
-  for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < 7; j++) {
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 8; j++) {
       Move try_move = Move(i, j);
       if (our_Board.checkMove(&try_move, our_side)) {
+	our_Board.doMove(&try_move, our_side);
 	return &try_move;
       }
     }
   }
-  
-  return NULL;
 }
