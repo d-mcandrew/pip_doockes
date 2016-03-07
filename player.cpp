@@ -1,4 +1,5 @@
 #include "player.h"
+#include <assert.h>
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
