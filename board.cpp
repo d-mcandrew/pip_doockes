@@ -198,5 +198,24 @@ int Board::get_simple_score(Move *move, Side side) {
     else {
         score = tempBoard->countWhite() - tempBoard->countBlack();
     }
+    // Apply further multipliers for moves in certain spaces
+    if ((move->x == 0 && move->y == 0) || (move->x == 0 && move->y == 7) ||
+        (move->x == 7 && move->y == 0) || (move->x == 7 && move->y == 7)) {
+        score *= 3;
+    }
+    else if ((move->x == 0 && move->y == 1) || (move->x == 0 && move->y == 6) ||
+             (move->x == 1 && move->y == 0) || (move->x == 1 && move->y == 7) ||
+             (move->x == 6 && move->y == 0) || (move->x == 6 && move->y == 7) ||
+             (move->x == 7 && move->y == 1) || (move->x == 7 && move->y == 6)) {
+        score *= -3;
+    }
+    else if (move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7) {
+        score *= 2;
+    }
     return score;
 }
+
+
+
+
+

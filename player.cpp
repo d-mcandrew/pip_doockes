@@ -69,23 +69,15 @@ Player::~Player() {
 
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
     // Make opponent's move on the board:
-    std::cerr << "first\n";
     our_Board.doMove(opponentsMove, other_side);
-    // Return NULL if there are no possible moves:
-    std::cerr << "second\n";
-    if (not(our_Board.hasMoves(our_side))) {
-        return NULL;
-    }
     // Now find our next move:
     // Initialize vector of scored first moves
-    std::cerr << "third\n";
     std::vector<scored_move> minimum_map;
     // Iterate through all possible first moves
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) { 
 	  Move * temp_move = new Move(i, j);
             // Check that this is a valid move
-            std::cerr << "trying first move\n";
             if (our_Board.checkMove(temp_move, our_side)) {
                 // Create a copy of this board to try further moves
                 Board *temp_Board = our_Board.copy();
@@ -94,7 +86,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                 // Vector of scores possible from next possible moves
                 std::vector<int> possible_scores;
                 // Iterate through possible next moves
-                std::cerr << "trying second move\n";
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) { 
 		      Move *temp_next_move = new Move(i, j);
@@ -107,7 +98,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                     }
                 }
                 // Find smallest of these scores
-                std::cerr << "fourth\n";
                 int smallest_score = 65;
                 for (unsigned int i = 0; i < possible_scores.size(); i++) {
                     if (possible_scores[i] < smallest_score) {
@@ -125,7 +115,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     // Now that we have a map of first moves and corresponding smallest possible 
     // scores, we can find the move which gives the maximum minimum score
     int max_score = -65;
-    try_move = new Move(0, 0);
+    try_move = NULL;
     for (unsigned int i = 0; i < minimum_map.size(); i++) {
         if (minimum_map[i].score > max_score) {
             max_score = minimum_map[i].score;
