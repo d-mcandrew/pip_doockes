@@ -49,35 +49,10 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
    */ 
   // check if opponent's move was not NULL. 
   // If not, make their move on our board.
-  std::cerr << "first\n";
   our_Board.doMove(opponentsMove, other_side);
-  std::cerr << "second\n";
-  // If we have no possible moves, return NULL:
-<<<<<<< HEAD
-  if (not(our_Board.hasMoves(our_side))) {
-    return NULL;
-  }
-
-  for (int i = 0; i < 8; i++) {
-    for (int j = 0; j < 8; j++) {
-      Move try_move = Move(i, j);
-      if (our_Board.checkMove(&try_move, our_side)) {
-	our_Board.doMove(&try_move, our_side);
-	return &try_move;
-      }
-    }
-  }
-=======
-  //if (not(our_Board.hasMoves(our_side))) {
-    //return NULL;
-  //}
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) { 
-      std::cerr << "third\n";
-      Move temp_move = Move(i, j);
-      std::cerr << "fourth\n";
-      try_move = &temp_move;
-      //try_move = &Move(i, j);
+      try_move = new Move(i, j);
       std::cerr << "trying a move:\n";
       if (our_Board.checkMove(try_move, our_side)) {
         our_Board.doMove(try_move, our_side);  
@@ -88,7 +63,6 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
   }
   std::cerr << "null?\n";
   return NULL;
->>>>>>> 42e717807b81104526d00212b341184eb27d6dca
 }
 
 
