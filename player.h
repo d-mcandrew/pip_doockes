@@ -12,6 +12,7 @@ private:
   Board our_Board;
   Side our_side;
   Side other_side;
+  Move* try_move;
 
 public:
     Player(Side side);

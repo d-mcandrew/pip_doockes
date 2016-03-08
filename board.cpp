@@ -178,3 +178,27 @@ void Board::setBoard(char data[]) {
         }
     }
 }
+
+
+/*
+ * Returns the score that will result from making Move m on the board. The 
+ * following simple heuristic function determines the score:
+ * score = (# of our pieces) - (# of other side's pieces)
+ */
+/*
+int Board::get_simple_score(Move *move, Side side) {
+    // Make a copy of the current board for use only in this function
+    Board tempBoard = Board.copy;
+    // Do given move on this board
+    tempBoard.doMove(*move, side);
+    int score;
+    // Check which side we are on and calculate score
+    if (side == BLACK) {
+        score = tempBoard.countBlack() - tempBoard.countWhite();
+    }
+    else {
+        score = tempBoard.countWhite() - tempBoard.countBlack();
+    }
+    return score;
+}
+*/
