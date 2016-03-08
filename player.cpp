@@ -44,29 +44,6 @@ Player::~Player() {
  * The move returned must be legal; if there are no valid moves for your side,
  * return NULL.
  */
-// Move *Player::doMove(Move *opponentsMove, int msLeft) {
-//   our_Board.doMove(opponentsMove, other_side);
-//   try_move = NULL;
-//   Move * best_move = NULL;
-//   int best_score = -99;
-//   for (int i = 0; i < 8; i++) {
-//     for (int j = 0; j < 8; j++) { 
-//       try_move = new Move(i, j);
-//       if (our_Board.checkMove(try_move, our_side)) {
-// 	int score = our_Board.get_simple_score(try_move, our_side, our_side);
-// 	if (score > best_score) {
-// 	  best_score = score;
-// 	  best_move = try_move;
-// 	}
-//       }
-//     }
-//   }
-//   our_Board.doMove(best_move, our_side);
-//   return best_move;
-// }
-
-
-
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
     // Make opponent's move on the board:
     our_Board.doMove(opponentsMove, other_side);
@@ -91,8 +68,22 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 		      Move *temp_next_move = new Move(i, j);
                         // Check validity
                         if (our_Board.checkMove(temp_next_move, other_side)) {
-                            // Calculate result of this second move
-                            int score = temp_Board->get_simple_score(temp_next_move, other_side, our_side);
+                            // Calculate result of this second move, using 
+                            // either a simple or more complex heuristic,
+                            // depending on what we are currently testing
+                            int score;
+                            if (testingMinimax) {
+                                score = 
+                                temp_Board->get_simple_score(temp_next_move, 
+                                                              other_side,
+                                                             our_side);
+                            }
+                            else {
+                                score = 
+                                temp_Board->get_complex_score(temp_next_move, 
+                                                              other_side, 
+                                                              our_side);
+                            }
                             possible_scores.push_back(score);
                         }
                     }
@@ -112,7 +103,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
             }
         }
     }
-    // Now that we have a map of first moves and corresponding smallest possible 
+    // Now that we have a map of first moves and corresponding min possible 
     // scores, we can find the move which gives the maximum minimum score
     int max_score = -65;
     try_move = NULL;

@@ -198,39 +198,114 @@ int Board::get_simple_score(Move *move, Side moving_side, Side scoring_side) {
     else {
         score = tempBoard->countWhite() - tempBoard->countBlack();
     }
+    return score;
+}
+
+/*
+ * Returns the score that will result from making Move m on the board. The 
+ * following simple heuristic function determines the score, in addition to
+ * several other considerations for special spaces (corners and edges):
+ * score = (# of our pieces) - (# of other side's pieces)
+ */
+int Board::get_complex_score(Move *move, Side moving_side, Side scoring_side) {
+    // Make a copy of the current board for use only in this function
+    Board *tempBoard = this->copy();
+    // Do given move on this board
+    tempBoard->doMove(move, moving_side);
+    int score;
+    // Check which side we are on and calculate score
+    if (scoring_side == BLACK) {
+        score = tempBoard->countBlack() - tempBoard->countWhite();
+    }
+    else {
+        score = tempBoard->countWhite() - tempBoard->countBlack();
+    }
     // Apply further multipliers for moves in certain spaces
+    // Bonus for corners:
     if ((move->x == 0 && move->y == 0) || (move->x == 0 && move->y == 7) ||
         (move->x == 7 && move->y == 0) || (move->x == 7 && move->y == 7)) {
         if (moving_side == scoring_side) {
-            score *= 1.5;
+            score += 7;
         }
         else {
-            score *= -1.5;
+            score -= 7;
         }
     }
-    else if ((move->x == 0 && move->y == 1) || (move->x == 0 && move->y == 6) ||
-             (move->x == 1 && move->y == 0) || (move->x == 1 && move->y == 7) ||
-             (move->x == 6 && move->y == 0) || (move->x == 6 && move->y == 7) ||
-             (move->x == 7 && move->y == 1) || (move->x == 7 && move->y == 6)) {
-        if (moving_side == scoring_side) {
-            score *= -1.5;
+    // Bonus for edges next to corners which we own, penalty for edges next to 
+    // unoccupied corners, or slight bonus for edges next to corners owned by
+    // the other side
+    // Top left
+    else if ((move->x == 0 && move->y == 1) || (move->x == 1 && move->y == 0)) {
+        if ((black[0 + 0 * 8] == 1 && scoring_side == BLACK) ||
+            (taken[0 + 0 * 8] == 1 && black[0 + 0 * 8] == 0 
+                                   && scoring_side == WHITE)) {
+            score += 7;
+        }
+        else if ((black[0 + 0 * 8] == 1 && scoring_side == WHITE) ||
+                 (taken[0 + 0 * 8] == 1 && black[0 + 0 * 8] == 0 
+                                        && scoring_side == BLACK)) {
+            score += 2;
         }
         else {
-            score *= 1.5;
+            score -= 5;
         }
     }
+    // Top right
+    else if ((move->x == 0 && move->y == 6) || (move->x == 1 && move->y == 7)) {
+        if ((black[7 + 0 * 8] == 1 && scoring_side == BLACK) ||
+            (taken[7 + 0 * 8] == 1 && black[7 + 0 * 8] == 0 
+                                   && scoring_side == WHITE)) {
+            score += 7;
+        }
+        else if ((black[7 + 0 * 8] == 1 && scoring_side == WHITE) ||
+                 (taken[7 + 0 * 8] == 1 && black[7 + 0 * 8] == 0 
+                                        && scoring_side == BLACK)) {
+            score += 2;
+        }
+        else {
+            score -= 5;
+        }
+    }
+    // Bottom left
+    else if ((move->x == 6 && move->y == 0) || (move->x == 7 && move->y == 1)) {
+        if ((black[0 + 7 * 8] == 1 && scoring_side == BLACK) ||
+            (taken[0 + 7 * 8] == 1 && black[0 + 7 * 8] == 0 
+                                   && scoring_side == WHITE)) {
+            score += 7;
+        }
+        else if ((black[0 + 7 * 8] == 1 && scoring_side == WHITE) ||
+                 (taken[0 + 7 * 8] == 1 && black[0 + 7 * 8] == 0 
+                                        && scoring_side == BLACK)) {
+            score += 2;
+        }
+        else {
+            score -= 5;
+        }
+    }  
+    // Bottom right
+    else if ((move->x == 7 && move->y == 6) || (move->x == 6 && move->y == 7)) {
+        if ((black[7 + 7 * 8] == 1 && scoring_side == BLACK) ||
+            (taken[7 + 7 * 8] == 1 && black[7 + 7 * 8] == 0 
+                                   && scoring_side == WHITE)) {
+            score += 7;
+        }
+        else if ((black[7 + 7 * 8] == 1 && scoring_side == WHITE) ||
+                 (taken[7 + 7 * 8] == 1 && black[7 + 7 * 8] == 0 
+                                        && scoring_side == BLACK)) {
+            score += 2;
+        }
+        else {
+            score -= 5;
+        }
+    }
+    // Bonus for other edge spaces
     else if (move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7) {
         if (moving_side == scoring_side) {
-            score *= 1.25;
+            score += 2;
         }
         else {
-            score *= -1.25;
+            score -= 2;
         }
     }
     return score;
 }
-
-
-
-
-
