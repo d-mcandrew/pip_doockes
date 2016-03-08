@@ -13,19 +13,25 @@ Player::Player(Side side) {
   // Will be set to true in test_minimax.cpp.
   testingMinimax = false;
 
-  // Hi Mara Green!
   our_side = side;
   other_side = (our_side == BLACK) ? WHITE : BLACK;
   our_Board = Board();
   try_move = NULL;
-
-   /* 
-   * TODO: Do any initialization you need to do here (setting up the board,
-   * precalculating things, etc.) However, remember that you will only have
-   * 30 seconds.
-   */
 }
 
+/*
+ * Player constructor for testminimax
+ */
+Player::Player(Side side, Board *board) {
+  // Will be set to true in test_minimax.cpp.
+  testingMinimax = true;
+
+  our_side = side;
+  other_side = (our_side == BLACK) ? WHITE : BLACK;
+  our_Board = *board;
+  try_move = NULL;
+}
+    
 /*
  * Destructor for the player.
  */
@@ -65,9 +71,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                 // Iterate through possible next moves
                 for (int i = 0; i < 8; i++) {
                     for (int j = 0; j < 8; j++) { 
-		      Move *temp_next_move = new Move(i, j);
+		                Move *temp_next_move = new Move(i, j);
                         // Check validity
-                        if (our_Board.checkMove(temp_next_move, other_side)) {
+                        if (temp_Board->checkMove(temp_next_move, other_side)) {
                             // Calculate result of this second move, using 
                             // either a simple or more complex heuristic,
                             // depending on what we are currently testing
@@ -75,7 +81,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                             if (testingMinimax) {
                                 score = 
                                 temp_Board->get_simple_score(temp_next_move, 
-                                                              other_side,
+                                                             other_side,
                                                              our_side);
                             }
                             else {

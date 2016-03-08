@@ -307,5 +307,14 @@ int Board::get_complex_score(Move *move, Side moving_side, Side scoring_side) {
             score -= 2;
         }
     }
+    // Slight penalty for spaces adjacent to edges
+    else if (move->x == 1 || move->x == 6 || move->y == 1 || move->y == 6) {
+        if (moving_side == scoring_side) {
+            score += 1;
+        }
+        else {
+            score -= 1;
+        }
+    }
     return score;
 }

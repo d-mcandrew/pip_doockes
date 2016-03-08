@@ -9,13 +9,15 @@ using namespace std;
 class Player {
 
 private:
-  Board our_Board;
+  
   Side our_side;
   Side other_side;
   Move* try_move;
 
 public:
+    Board our_Board;
     Player(Side side);
+    Player(Side side, Board *board);
     ~Player();
     
     Move *doMove(Move *opponentsMove, int msLeft);
