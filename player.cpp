@@ -1,5 +1,7 @@
 #include "player.h"
-#include <assert.h>
+#include <map>
+#include <vector>
+
 
 
 /*
@@ -43,33 +45,71 @@ Player::~Player() {
  * return NULL.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
-  /* 
-   * TODO: Implement how moves your AI should play here. You should first
-   * process the opponent's move before calculating your own move
-   */ 
-  // check if opponent's move was not NULL. 
-  // If not, make their move on our board.
+  // Make opponent's move on the board:
   our_Board.doMove(opponentsMove, other_side);
+  // Return NULL if there are no possible moves:
+  if (not(our_Board.hasMoves(our_side))) {
+      return NULL;
+  }
+  // Now find our next move:
+  // Map of possible first moves and the maximum minimum score which will result
+  // from it after one more move
+ std::map<Move, int> minimum_map;
+  // Iterate through all possible first moves
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) { 
-      try_move = new Move(i, j);
-      std::cerr << "trying a move:\n";
+      try_move = Move(i, j);
+      // Check that this is a valid move
       if (our_Board.checkMove(try_move, our_side)) {
-        our_Board.doMove(try_move, our_side);  
-        std::cerr << "returning a move:\n";
-	    return try_move;
-      }
+          // Create a copy of this board to try further moves
+          Board *temp_Board = our_Board.copy();
+          // Do first move on this board
+          temp_Board->doMove(try_move, our_side);
+          // Vector of scores possible from next possible moves
+          std::vector<int> possible_scores;
+          // Iterate through possible next moves
+          for (int i = 0; i < 8; i++) {
+              for (int j = 0; j < 8; j++) { 
+                  Move try_next_move = Move(i, j);
+                  // Check validity
+                  if (our_Board.checkMove(try_next_move, other_side)) {
+                      // Calculate result of this second move
+                      int score = temp_Board->get_simple_score(try_next_move, other_side);
+                      possible_scores.push_back(score);
+                  }
+              }
+          }
+          // Find smallest of these scores
+          int smallest_score = 65;
+          for (unsigned int i = 0; i < possible_scores.size(); i++) {
+              if (possible_scores[i] < smallest_score) {
+                smallest_score = possible_scores[i];
+              }
+          }
+          // Add the pair of this minimax score and first move to map
+          minimum_map.insert(std::pair<*Move, int> (try_move, smallest_score));
+       }
     }
-  }
-  std::cerr << "null?\n";
-  return NULL;
+}
+// Now that we have a map of first moves and corresponding smallest possible 
+// scores, we can find the move which gives the maximum minimum score
+std::map<Move, int>::iterator it;
+int max_score = 0;
+try_move = new Move(0, 0);
+for (it = minimum_map.begin; it != score_map.end; it++) {
+    if (it->second > max_score) {
+        max_score = it->second;
+        try_move = it->first;
+    }
+}
+our_Board.doMove(try_move, our_side);
+return try_move;
 }
 
 
 // attempts at implementing simple heuristic
 
-
-/*    
+/*   
 std::unordered_map<Move*, int> score_map;
 for (int i = 0; i < 7; i++) {
     for (int j = 0; j < 7; j++) { 
@@ -91,7 +131,11 @@ for (it = score_map.begin; it != score_map.end; it++) {
     }
 }
 return best_move;
-*/    
+*/
+
+
+
+// attempts at implementing minimax shit
 
 
 

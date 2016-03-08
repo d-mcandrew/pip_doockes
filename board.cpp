@@ -185,10 +185,9 @@ void Board::setBoard(char data[]) {
  * following simple heuristic function determines the score:
  * score = (# of our pieces) - (# of other side's pieces)
  */
-/*
 int Board::get_simple_score(Move *move, Side side) {
     // Make a copy of the current board for use only in this function
-    Board tempBoard = Board.copy;
+    Board *tempBoard = Board.copy();
     // Do given move on this board
     tempBoard.doMove(*move, side);
     int score;
@@ -201,4 +200,3 @@ int Board::get_simple_score(Move *move, Side side) {
     }
     return score;
 }
-*/
