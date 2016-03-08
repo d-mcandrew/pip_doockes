@@ -119,7 +119,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     for (unsigned int i = 0; i < minimum_map.size(); i++) {
         if (minimum_map[i].score > max_score) {
             max_score = minimum_map[i].score;
-            *try_move = minimum_map[i].move;
+            try_move = new Move(minimum_map[i].move.x, minimum_map[i].move.y);
         } 
     }
     our_Board.doMove(try_move, our_side);
