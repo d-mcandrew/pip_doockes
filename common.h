@@ -22,4 +22,13 @@ public:
     void setY(int y) { this->y = y; }
 };
 
+struct scored_move {
+    int score;
+    Move move;
+    scored_move() {
+        this->score = 0;
+        this->move = Move();
+    }
+};
+
 #endif
