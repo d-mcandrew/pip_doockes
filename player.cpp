@@ -48,7 +48,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
   our_Board.doMove(opponentsMove, other_side);
   try_move = NULL;
   Move * best_move = NULL;
-  int best_score = 0;
+  int best_score = -99;
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) { 
       try_move = new Move(i, j);
