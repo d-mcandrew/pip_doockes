@@ -53,7 +53,7 @@ Player::~Player() {
 //     for (int j = 0; j < 8; j++) { 
 //       try_move = new Move(i, j);
 //       if (our_Board.checkMove(try_move, our_side)) {
-// 	int score = our_Board.get_simple_score(try_move, our_side);
+// 	int score = our_Board.get_simple_score(try_move, our_side, our_side);
 // 	if (score > best_score) {
 // 	  best_score = score;
 // 	  best_move = try_move;
@@ -92,7 +92,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                         // Check validity
                         if (our_Board.checkMove(temp_next_move, other_side)) {
                             // Calculate result of this second move
-                            int score = temp_Board->get_simple_score(temp_next_move, our_side);
+                            int score = temp_Board->get_simple_score(temp_next_move, other_side, our_side);
                             possible_scores.push_back(score);
                         }
                     }

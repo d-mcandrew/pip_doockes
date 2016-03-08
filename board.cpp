@@ -185,14 +185,14 @@ void Board::setBoard(char data[]) {
  * following simple heuristic function determines the score:
  * score = (# of our pieces) - (# of other side's pieces)
  */
-int Board::get_simple_score(Move *move, Side side) {
+int Board::get_simple_score(Move *move, Side moving_side, Side scoring_side) {
     // Make a copy of the current board for use only in this function
     Board *tempBoard = this->copy();
     // Do given move on this board
-    tempBoard->doMove(move, side);
+    tempBoard->doMove(move, moving_side);
     int score;
     // Check which side we are on and calculate score
-    if (side == BLACK) {
+    if (scoring_side == BLACK) {
         score = tempBoard->countBlack() - tempBoard->countWhite();
     }
     else {
@@ -201,16 +201,31 @@ int Board::get_simple_score(Move *move, Side side) {
     // Apply further multipliers for moves in certain spaces
     if ((move->x == 0 && move->y == 0) || (move->x == 0 && move->y == 7) ||
         (move->x == 7 && move->y == 0) || (move->x == 7 && move->y == 7)) {
-        score *= 3;
+        if (moving_side == scoring_side) {
+            score *= 1.5;
+        }
+        else {
+            score *= -1.5;
+        }
     }
     else if ((move->x == 0 && move->y == 1) || (move->x == 0 && move->y == 6) ||
              (move->x == 1 && move->y == 0) || (move->x == 1 && move->y == 7) ||
              (move->x == 6 && move->y == 0) || (move->x == 6 && move->y == 7) ||
              (move->x == 7 && move->y == 1) || (move->x == 7 && move->y == 6)) {
-        score *= -3;
+        if (moving_side == scoring_side) {
+            score *= -1.5;
+        }
+        else {
+            score *= 1.5;
+        }
     }
     else if (move->x == 0 || move->x == 7 || move->y == 0 || move->y == 7) {
-        score *= 2;
+        if (moving_side == scoring_side) {
+            score *= 1.25;
+        }
+        else {
+            score *= -1.25;
+        }
     }
     return score;
 }
