@@ -95,7 +95,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                     }
                 }
                 // Find smallest of these scores
-                int smallest_score = 65;
+                int smallest_score = 99;
                 for (unsigned int i = 0; i < possible_scores.size(); i++) {
                     if (possible_scores[i] < smallest_score) {
                         smallest_score = possible_scores[i];
@@ -111,7 +111,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     }
     // Now that we have a map of first moves and corresponding min possible 
     // scores, we can find the move which gives the maximum minimum score
-    int max_score = -65;
+    int max_score = -99;
     try_move = NULL;
     for (unsigned int i = 0; i < minimum_map.size(); i++) {
         if (minimum_map[i].score > max_score) {
